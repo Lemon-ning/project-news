@@ -27,18 +27,50 @@
                 <input type="password" class="form-control" id="password" name="password" placeholder="Password">
             </div>
             <div class="checkbox">
-                <label>
-          <input type="checkbox">记住我
-        </label>
+                <label><input type="checkbox">记住我</label>
             </div>
             <button type="submit" class="btn btn-success btn-block">登录</button>
         </form>
         <div class="message">
-            <p>没有账号? <a href="/signup">点击创建</a>.</p>
+            <p>没有账号? <a href="/signup">点击创建</a></p>
         </div>
     </div>
     <script src="/node_modules/jquery/dist/jquery.js"></script>
     <script>
+        // 点击登录按钮的时候，获取表单数据，将表单数据通过 ajax 发送给服务端，
+        //                   服务端接受数据，进行数据校验，返回给前台校验结果
+        // 获取表单信息：表单中的 input 标签需有 name 属性
+        // 取消表单默认提交方式：表单默认是全部刷新，而我们只需要局部刷新即可，采用 ajax 请求
+        //                     表单默认有提交事件： submit 
+        $('#signin_form').submit(function(e){
+            // 取消表单的默认提交事件
+            e.preventDefault();
+            // 获取表单中的元素
+            var fromData = $(this).serialize();
+            // console.log(fromData);
+            $.post('/handleSignin',fromData,function(response){
+                // console.log(response);
+                // 对接收到的响应结果 {code: 200, message: "登录成功，跳转到列表页"}
+                // 根据其响应回来的状态码进行判断，执行响应的操作
+                switch (response.code){
+                    case 500:
+                        alert(response.message);
+                        break;
+                    case 1:
+                        alert(response.message);
+                        break;
+                    case 2:
+                        alert(response.message);
+                        break;
+                    case 200:
+                        // 如果状态码是200 则说明用户邮箱、密码正确，跳转到话题列表页
+                        window.location.href = '/';
+                        break;
+                    default:
+                        break;
+                }
+            })
+        })
     </script>
 </body>
 
